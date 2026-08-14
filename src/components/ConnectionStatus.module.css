@@ -1,0 +1,14 @@
+.errorBanner {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  border-left: 4px solid var(--trend-down);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+}
+
+.liveIndicator {
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}

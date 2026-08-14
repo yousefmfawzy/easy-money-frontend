@@ -1,0 +1,15 @@
+.image {
+  border-radius: 50%;
+  object-fit: cover;
+  background-color: var(--color-bg-surface);
+}
+
+.placeholder {
+  border-radius: 50%;
+  background-color: var(--color-bg-surface-hover);
+  color: var(--color-text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}

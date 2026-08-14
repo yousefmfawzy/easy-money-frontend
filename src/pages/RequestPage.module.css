@@ -1,0 +1,243 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  padding: var(--space-4);
+  font-family: var(--font-family-sans);
+}
+
+.centerPage {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-base);
+}
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  margin-top: 0;
+  margin-bottom: var(--space-6);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+.label {
+  font-weight: 600;
+  font-size: var(--font-size-base);
+}
+
+.input {
+  background-color: var(--color-bg-base);
+  border: 1px solid var(--color-bg-surface-hover);
+  color: var(--color-text-primary);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  font-size: 16px; /* Prevents iOS zoom */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: 2px solid var(--trend-up);
+  outline-offset: -1px;
+}
+
+.input[aria-invalid="true"] {
+  border-color: var(--trend-down);
+}
+
+.fileInput {
+  font-size: 16px;
+  width: 100%;
+}
+
+.errorText {
+  color: var(--trend-down);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}
+
+.radioGroup {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.radioLabel {
+  flex: 1;
+  text-align: center;
+  padding: var(--space-4);
+  background-color: var(--color-bg-base);
+  border: 2px solid transparent;
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.radioLabelActive {
+  background-color: rgba(34, 197, 94, 0.1);
+  border-color: var(--trend-up);
+  color: var(--trend-up);
+}
+
+.radioLabelActive:has(input[value="SELL"]) {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: var(--trend-down);
+  color: var(--trend-down);
+}
+
+.indicativeBox {
+  background-color: rgba(100, 116, 139, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.indicativeLabel {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.indicativeValue {
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+}
+
+.indicativeDisclaimer {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.photoPreview {
+  margin-top: var(--space-2);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.photoPreview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.submitButton {
+  background-color: var(--trend-up);
+  color: var(--color-bg-base);
+  border: none;
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: var(--space-4);
+  transition: opacity 0.2s;
+}
+
+.submitButton:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.submitButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.submitError {
+  margin-bottom: var(--space-6);
+}
+
+.confirmationCard {
+  text-align: center;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-6);
+}
+
+.detailsList {
+  text-align: left;
+  background-color: var(--color-bg-base);
+  border-radius: var(--radius-md);
+  padding: var(--space-4);
+  margin-bottom: var(--space-6);
+}
+
+.detailRow {
+  display: flex;
+  justify-content: space-between;
+  padding: var(--space-2) 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+}
+
+.detailRow dt {
+  color: var(--color-text-secondary);
+  font-weight: 500;
+}
+
+.detailRow dd {
+  margin: 0;
+  font-weight: 600;
+}
+
+.resetButton {
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-bg-surface-hover);
+  border-radius: var(--radius-md);
+  padding: var(--space-3) var(--space-6);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.resetButton:hover {
+  background-color: var(--color-bg-surface-hover);
+}

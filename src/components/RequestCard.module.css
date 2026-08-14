@@ -1,0 +1,191 @@
+.card {
+  background-color: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.requester {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: var(--color-bg-base);
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.name {
+  margin: 0;
+  font-size: var(--font-size-md);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.statusBadge {
+  font-size: var(--font-size-xs);
+  font-weight: 700;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.statusPENDING {
+  background-color: rgba(245, 158, 11, 0.15);
+  color: #d97706;
+}
+
+.statusAPPROVED {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.statusREJECTED {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+.tradeDetails {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.tradeType {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  font-size: var(--font-size-md);
+}
+
+.typeMarker {
+  font-weight: 700;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+}
+
+.typeBUY {
+  background-color: rgba(16, 185, 129, 0.15);
+  color: #059669;
+}
+
+.typeSELL {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #dc2626;
+}
+
+.units {
+  color: var(--color-text-secondary);
+}
+
+.etfName {
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.snapshots {
+  background-color: var(--color-bg-base);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.snapshotNote {
+  margin: 0;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.snapshotValues {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+}
+
+.snapshotStat {
+  display: flex;
+  flex-direction: column;
+}
+
+.snapshotLabel {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
+}
+
+.snapshotValue {
+  font-weight: 500;
+  color: var(--color-text-primary);
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid var(--color-bg-base);
+  padding-top: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+.timestamps {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.actionButton {
+  padding: var(--space-2) var(--space-4);
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 600;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+}
+
+.actionButton:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.approveButton {
+  background-color: var(--trend-up, #10b981);
+  color: white;
+}
+
+.rejectButton {
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+}

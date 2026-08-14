@@ -1,0 +1,49 @@
+.card {
+  background-color: var(--color-bg-surface);
+  border: 2px solid transparent;
+  border-top-color: inherit;
+  border-radius: var(--radius-lg);
+  padding: clamp(var(--space-4), 2vw, var(--space-6));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  transition: transform 0.2s, box-shadow 0.2s;
+  background-image: linear-gradient(to bottom, color-mix(in srgb, var(--trend-color) 12%, transparent), transparent 40%);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.valueContainer {
+  margin: clamp(var(--space-2), 2vh, var(--space-4)) 0;
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-top: 1px solid var(--color-bg-base);
+  padding-top: var(--space-4);
+}
