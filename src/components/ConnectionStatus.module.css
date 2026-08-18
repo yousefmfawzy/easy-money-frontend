@@ -4,11 +4,41 @@
   border-left: 4px solid var(--trend-down);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-sm);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   font-size: var(--font-size-sm);
 }
 
 .liveIndicator {
   color: var(--color-text-secondary);
   font-size: var(--font-size-sm);
+}
+
+/*
+ * Projector variant. The artboard's support.js keeps a `data-ago` readout
+ * ("12s AGO") directly under the clock; this fills that slot and doubles as
+ * the reconnecting indicator, sized in cqw like the rest of the board.
+ */
+.projector {
+  font-size: 1.35cqw;
+  font-weight: var(--font-weight-heavy);
+  letter-spacing: 0.1em;
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 0.6cqw;
+}
+
+.projectorLive { color: var(--color-text-secondary); }
+
+/* Stale data is a warning, not a failure — the last-good values stay on screen. */
+.projectorStale { color: var(--color-orange); }
+
+.staleDot {
+  width: 0.7cqw;
+  height: 0.7cqw;
+  border-radius: 50%;
+  background: var(--color-orange);
+  animation: em-blink 2s ease-in-out infinite;
+  flex: none;
 }

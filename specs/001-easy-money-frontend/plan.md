@@ -63,8 +63,11 @@ backend URL, and that origin must be added to the backend's `CORS_ORIGINS`.
 
 ## Design mapping
 
-Tokens (surface palette, text colours, `--trend-up/down/flat`, spacing scale, radii,
-type scale, shadows) are lifted from the projector artboard into `styles/tokens.css`.
+Tokens are lifted verbatim from `design/Stock Market Projector.dc.html` into
+`styles/tokens.css`: `#000000` ground, `#3ADF00` green, `#F26522` orange,
+`#FF1E1E` down-red, Rubik 500/700/800/900, and the five `em-*` keyframes.
+The projector sizes everything in `cqw` inside a 16:9 size container, so the
+board scales as one unit; admin screens reuse the same palette on a rem scale.
 Every component — public and admin — consumes those tokens, so the mobile admin
 screens the artboard does not cover still read as the same product. The artboard's
 value-change animation is reimplemented as React state transitions rather than
@@ -72,8 +75,19 @@ shipping the design file's script.
 
 ## Risks
 
-- The design source could not be re-imported in this environment (see spec notes and
-  the PR description); the token layer already extracted from it is the working
-  reference and must be reconciled against the artboard when it is reachable.
+- RESOLVED: the artboard was delivered as a published Artifact bundle and decoded
+  into `design/`. The token layer is now derived from its literal values rather
+  than approximated, and the projector view is built directly against it.
 - Vite inlines env vars at build time — a wrong `VITE_API_BASE_URL` cannot be fixed
   at runtime, only rebuilt.
+
+## Deviations from the artboard (and why)
+
+| Artboard | Shipped | Reason |
+|---|---|---|
+| 6 bars | 7 bars | The product has exactly 7 ETFs; bars are `flex: 1` so they fit. |
+| Value type 1.95cqw, currency 1.05cqw | 1.5cqw / 0.8cqw | API money is fixed-2-decimal (`94500.00`), wider than the artboard's integer placeholders; 7 slots need the smaller step to avoid collisions. |
+| Legend name 2.1cqw | 1.75cqw | Same 7-across constraint (`ENERGY` truncated at 2.1cqw). |
+| Axis fixed 1,000–100,000 | Derived from live values | Placeholder scale; real ETFs seed at 0. `buildScale` keeps the six-gridline treatment and falls back to a 0–100 ceiling so the pre-camp board still draws. |
+| Hand-written Arabic news ticker | Ticker built from real ETF movements + the artboard's own standing reminder | No news endpoint exists and inventing one is out of bounds; visual treatment kept, content filled from `GET /api/etfs`. |
+| `data-ago` readout in support.js | `ConnectionStatus variant="projector"` | Fills the artboard's under-clock slot and doubles as the reconnecting indicator. |

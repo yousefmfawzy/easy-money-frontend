@@ -57,12 +57,15 @@ Status legend: [x] done · [ ] outstanding
 - [x] T039 Constitution ratified
 - [x] T040 `spec.md`, `plan.md`, `tasks.md` committed
 
-## Outstanding
-- [ ] T041 Re-import `Stock Market Projector.dc.html` + `support.js` and reconcile the
-      token layer, projector layout, and value-change motion against the artboard.
-      Blocked: re-attempted via the design tool on 2026-08-18 against project
-      `59965c17-a894-4543-8c2c-a6f57259df89`; it returned that design-system
-      authorization requires `/design-login`, which needs an interactive terminal
-      unavailable in this environment. The design files are not in the workspace.
-      Unblocked by "Send to Claude Code Web" or by committing the files to the repo.
-      Until then `styles/tokens.css` is a stand-in, NOT design-derived.
+## Phase 8 — Design reconciliation
+- [x] T041 Imported the finished artboard (delivered as a published Artifact bundle,
+      decoded to `design/Stock Market Projector.dc.html` + `design/support.js`, both
+      committed as the visual source of truth).
+- [x] T042 Re-derived `styles/tokens.css` from the artboard's literal values:
+      black `#000000`, green `#3ADF00`, orange `#F26522`, red `#FF1E1E`, Rubik
+      500/700/800/900, and the artboard's five keyframes.
+- [x] T043 Rebuilt the public dashboard as the projector: 16:9 cqw size-container,
+      logo + wordmark + live clock, bar chart with derived axis, per-ETF legend,
+      RTL news ticker.
+- [x] T044 Reimplemented `support.js` behaviour idiomatically in React
+      (`useClock`, `useChangePulse`, CSS transitions) without shipping the script.

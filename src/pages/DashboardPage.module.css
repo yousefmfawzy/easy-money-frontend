@@ -1,68 +1,378 @@
-.page {
+/*
+ * Public projector dashboard.
+ * Geometry is lifted from design/Stock Market Projector.dc.html: a 16:9 stage
+ * that is a size container, with every dimension in cqw so the whole board
+ * scales as one unit from a laptop to a 4K projector without reflowing.
+ */
+
+.stage {
+  width: min(100vw, calc(100vh * 16 / 9));
+  aspect-ratio: 16 / 9;
+  flex: none;
+  background: var(--color-bg-base);
+  container-type: size;
+  font-family: var(--font-family-sans);
+  color: var(--color-green);
+  overflow: hidden;
+}
+
+.viewport {
+  display: flex;
+  width: 100%;
   min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-base);
+}
+
+.frame {
+  height: 100%;
   display: flex;
   flex-direction: column;
-  background-color: var(--color-bg-base);
-  color: var(--color-text-primary);
+  padding: 2.6cqw 3.4cqw 2.4cqw;
 }
+
+/* ── Header ─────────────────────────────────────────────── */
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 4cqw;
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5cqw;
+}
+
+.logo {
+  width: 9.4cqw;
+  height: 4.1cqw;
+  filter: var(--glow-logo);
+}
+
+.wordmark {
+  font-size: 3.9cqw;
+  font-weight: var(--font-weight-black);
+  line-height: 0.92;
+  letter-spacing: -0.02em;
+  color: var(--color-orange);
+}
+
+.headerRight {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.9cqw;
+}
+
+.clock {
+  font-size: 5cqw;
+  font-weight: var(--font-weight-black);
+  line-height: 0.9;
+  letter-spacing: 0.01em;
+  color: var(--color-green);
+  font-variant-numeric: tabular-nums;
+  text-shadow: var(--glow-clock);
+}
+
+.rule {
+  height: 0.12cqw;
+  background: var(--color-border);
+  margin: 1.4cqw 0 0;
+}
+
+/* ── Chart ──────────────────────────────────────────────── */
+
+.chart {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 9.4cqw 1fr;
+  column-gap: 1.6cqw;
+  align-items: end;
+  padding-top: 2.6cqw;
+}
+
+.axis {
+  position: relative;
+  height: 22.6cqw;
+}
+
+.axisCurrency {
+  position: absolute;
+  bottom: calc(100% + 2.4cqw);
+  right: 0;
+  font-size: 1.35cqw;
+  font-weight: var(--font-weight-heavy);
+  letter-spacing: 0.12em;
+  color: var(--color-orange);
+}
+
+.axisLabel {
+  position: absolute;
+  right: 0;
+  transform: translateY(50%);
+  font-size: 1.5cqw;
+  font-weight: var(--font-weight-heavy);
+  color: var(--color-green);
+  font-variant-numeric: tabular-nums;
+}
+
+.plot {
+  position: relative;
+  height: 22.6cqw;
+}
+
+.gridline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 0.1cqw;
+  background: var(--color-border-soft);
+}
+
+.baseline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0.18cqw;
+  background: var(--color-border-strong);
+}
+
+.bars {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  gap: 2.4cqw;
+}
+
+.barSlot {
+  position: relative;
+  flex: 1;
+  height: 100%;
+}
+
+.barValue {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  white-space: nowrap;
+  animation: em-rise var(--duration-rise) ease-out both;
+  transition: bottom var(--duration-height) var(--ease-height);
+}
+
+.barValueNumber {
+  display: inline-block;
+  font-size: 1.5cqw;
+  font-weight: var(--font-weight-black);
+  color: var(--color-green);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Retriggered by remounting via React key when a value changes. */
+.barValuePop {
+  animation: em-pop var(--duration-pop) var(--ease-pop);
+}
+
+.barValueCurrency {
+  font-size: 0.8cqw;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-orange);
+}
+
+.bar {
+  position: absolute;
+  left: 9%;
+  right: 9%;
+  bottom: 0;
+  border-radius: 1.1cqw 1.1cqw 0 0;
+  transform-origin: bottom;
+  animation: em-grow var(--duration-grow) var(--ease-grow) both;
+  transition:
+    height var(--duration-height) var(--ease-height),
+    background 0.3s linear,
+    box-shadow 0.3s linear;
+}
+
+.barUp { background: var(--trend-up); box-shadow: var(--glow-up); }
+.barDown { background: var(--trend-down); box-shadow: var(--glow-down); }
+.barFlat { background: var(--trend-flat); box-shadow: var(--glow-flat); }
+
+/* ── Per-ETF legend ─────────────────────────────────────── */
+
+.legend {
+  display: grid;
+  grid-template-columns: 9.4cqw 1fr;
+  column-gap: 1.6cqw;
+  padding-top: 1.4cqw;
+}
+
+.legendItems {
+  display: flex;
+  gap: 2.4cqw;
+}
+
+.legendItem {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.6cqw;
+  min-width: 0;
+}
+
+.badge {
+  width: 3.4cqw;
+  height: 3.4cqw;
+  border-radius: 50%;
+  border: 0.22cqw solid var(--color-orange);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5cqw;
+  font-weight: var(--font-weight-black);
+  color: var(--color-green);
+  overflow: hidden;
+  flex: none;
+}
+
+.badgeImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.legendName {
+  font-size: 1.75cqw;
+  font-weight: var(--font-weight-black);
+  letter-spacing: 0.03em;
+  color: var(--color-orange);
+  line-height: 1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.legendChange {
+  display: flex;
+  align-items: center;
+  gap: 0.35cqw;
+  font-size: 1.35cqw;
+  font-weight: var(--font-weight-heavy);
+  font-variant-numeric: tabular-nums;
+}
+
+.legendChangeIcon { font-size: 0.85em; }
+
+.changeUp { color: var(--trend-up); }
+/* The artboard paints down-change text orange (not the bar red). */
+.changeDown { color: var(--trend-down-text); }
+.changeFlat { color: var(--trend-flat); }
+
+/* ── Ticker ─────────────────────────────────────────────── */
+
+.ticker {
+  margin: 2cqw -3.4cqw -2.4cqw;
+  border-top: 0.16cqw solid var(--color-border);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  height: 4.4cqw;
+  flex: none;
+}
+
+.tickerLabel {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 0.7cqw;
+  align-self: stretch;
+  padding: 0 1.4cqw;
+  background: var(--color-orange);
+}
+
+.tickerDot {
+  width: 0.85cqw;
+  height: 0.85cqw;
+  border-radius: 50%;
+  background: var(--color-bg-base);
+  animation: em-blink 2s ease-in-out infinite;
+}
+
+.tickerLabelText {
+  font-size: 1.5cqw;
+  font-weight: var(--font-weight-black);
+  letter-spacing: 0.08em;
+  color: var(--color-bg-base);
+  white-space: nowrap;
+}
+
+.tickerViewport {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+.tickerTrack {
+  display: flex;
+  width: max-content;
+  animation: em-ticker 38s linear infinite;
+}
+
+.tickerRun {
+  display: flex;
+  align-items: center;
+  gap: 2.2cqw;
+  padding: 0 1.6cqw;
+  font-size: 1.6cqw;
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  color: var(--color-green);
+}
+
+.tickerSep { color: var(--color-orange); }
+.tickerStrong { color: var(--color-orange); font-weight: var(--font-weight-black); }
+
+/* ── States ─────────────────────────────────────────────── */
 
 .centerPage {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-bg-base);
-  padding: var(--space-4);
+  background: var(--color-bg-base);
+  padding: var(--space-8);
 }
 
-.header {
-  background-color: var(--color-bg-surface);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  padding: var(--space-4) var(--space-6);
+.statusSlot {
+  position: absolute;
+  top: 2.6cqw;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
 }
 
-.headerContent {
-  max-width: 1800px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: var(--space-4);
-}
-
-.title {
-  margin: 0;
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-}
-
-.main {
-  flex: 1;
-  padding: var(--space-4);
-  max-width: 1800px;
-  margin: 0 auto;
-  width: 100%;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: var(--space-4);
-}
-
-.footer {
-  padding: var(--space-6);
-  text-align: center;
+.emptyNote {
+  font-size: 1.35cqw;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
 }
 
 .requestLink {
-  color: var(--color-text-secondary);
-  text-decoration: none;
-  font-size: var(--font-size-sm);
+  font-size: 1.35cqw;
+  font-weight: var(--font-weight-heavy);
+  letter-spacing: 0.08em;
+  color: var(--color-orange);
+  border: 0.16cqw solid var(--color-orange);
+  border-radius: var(--radius-pill);
+  padding: 0.5cqw 1.4cqw;
 }
 
-.requestLink:hover {
-  text-decoration: underline;
-  color: var(--color-text-primary);
-}
+.requestLink:hover { background: var(--color-orange); color: var(--color-bg-base); }
