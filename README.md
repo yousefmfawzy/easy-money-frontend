@@ -11,7 +11,7 @@ The Easy Money camp market client. This frontend provides a public projector das
 ## Install
 
 ```bash
-cd frontend && npm install
+npm install
 ```
 
 ## Environment configuration
@@ -58,6 +58,34 @@ npm run preview
 
 The output in the `dist/` folder is purely static files. You can serve them from any static host. Point `VITE_API_BASE_URL` at the deployed backend **at build time** (Vite inlines it).
 
+## Deployment (DigitalOcean App Platform)
+
+Frontend and backend are separate App Platform components. A ready spec for the
+frontend lives in [`.do/app.yaml`](.do/app.yaml):
+
+```bash
+doctl apps create --spec .do/app.yaml          # first deploy
+doctl apps update <app-id> --spec .do/app.yaml # subsequent
+```
+
+Three things that will bite you if skipped:
+
+1. **`VITE_API_BASE_URL` must be `BUILD_TIME` scope.** Vite inlines it into the
+   bundle, so a run-time value is silently ignored and the deployed site will
+   call `http://localhost:8000`. Changing it needs a rebuild, not a restart.
+2. **`catchall_document: index.html` is required.** `/request`, `/admin/login`
+   and `/admin/*` are client-side routes with no file on disk. Without the
+   catchall they return 404 on direct load or refresh — and participants reach
+   `/request` by QR code, so it is the single most important path to get right.
+3. **Add the deployed frontend origin to the backend's `CORS_ORIGINS`.** It is
+   an exact-match allowlist and must not be `*` (credentials are allowed). A
+   perfectly deployed frontend fails completely without this.
+
+On the backend side, `data/` and `uploads/` must be persistent volumes;
+App Platform filesystems are ephemeral, so otherwise every uploaded logo and
+request photo — and the SQLite database — vanishes on restart.
+
+
 ## Tests & checks
 
 Run tests:
@@ -103,7 +131,7 @@ npm run dev
 ## Notes for camp
 
 - Put the projector browser in fullscreen on `/`.
-- The dashboard refreshes itself every 5 seconds and pauses while the tab is hidden, so leave it as the foreground tab.
+- The dashboard refreshes itself every 12 seconds and pauses while the tab is hidden, so leave it as the foreground tab.
 - If the backend goes down, the last known prices stay on screen with a warning banner and it recovers on its own.
 - Participants reach `/request` on their phones (a QR code to that URL is the easy way).
 

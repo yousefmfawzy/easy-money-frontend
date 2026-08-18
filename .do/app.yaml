@@ -1,0 +1,61 @@
+# DigitalOcean App Platform spec — Easy Money frontend.
+#
+# Deploy with:
+#   doctl apps create --spec .do/app.yaml
+# or update an existing app:
+#   doctl apps update <app-id> --spec .do/app.yaml
+#
+# The backend is a SEPARATE component and is intentionally not declared here
+# (its repo and runtime config are not part of this repository). See the
+# "Backend prerequisites" notes at the bottom — the frontend cannot work
+# without them, however correctly it is deployed.
+
+name: easy-money
+
+static_sites:
+  - name: frontend
+    github:
+      repo: yousefmfawzy/easy-money-frontend
+      branch: main
+      deploy_on_push: true
+
+    build_command: npm run build
+    output_dir: dist
+
+    index_document: index.html
+
+    # REQUIRED. The app is a client-side-routed SPA: /request, /admin/login and
+    # /admin/* exist only in the browser router, not as files on disk. Without a
+    # catchall, a direct hit or refresh on those paths returns 404 — verified by
+    # serving dist/ without a fallback: / => 200, /request => 404.
+    # Participants reach /request by QR code, so this is load-bearing.
+    catchall_document: index.html
+
+    # error_document is deliberately NOT set: it would shadow the catchall and
+    # re-break deep links.
+
+    envs:
+      # Vite INLINES this at build time, so it must be BUILD_TIME scope. A
+      # RUN_TIME value is silently ignored and the bundle would ship pointing at
+      # http://localhost:8000. Changing it requires a rebuild, not a restart.
+      - key: VITE_API_BASE_URL
+        scope: BUILD_TIME
+        # Replace with the deployed backend's public URL, e.g.
+        #   https://easy-money-backend-xxxxx.ondigitalocean.app
+        # If you add the backend as a service in THIS same app spec, you can
+        # bind it directly instead:  value: ${backend.PUBLIC_URL}
+        value: https://REPLACE-WITH-BACKEND-URL
+
+# ── Backend prerequisites (not managed by this spec) ────────────────────────
+#
+# 1. CORS_ORIGINS on the backend must contain this frontend's exact deployed
+#    origin (e.g. https://easy-money-frontend-xxxxx.ondigitalocean.app).
+#    It must never be "*", because credentials are allowed. A correct frontend
+#    still fails entirely without this.
+#
+# 2. The backend's data/ and uploads/ directories must be persistent volumes.
+#    App Platform filesystems are ephemeral, so without them every uploaded ETF
+#    logo and request photo disappears on restart or redeploy — and the SQLite
+#    database goes with them.
+#
+# 3. MAX_UPLOAD_MB must stay in sync with the client-side check (default 5).
