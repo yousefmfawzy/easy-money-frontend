@@ -62,5 +62,5 @@ export interface AdminIdentity {
 }
 
 export interface ApiErrorEnvelope {
-  error: { code: string; message: string; details: string | null };
+  error: { code: string; message: string; details?: unknown };
 }

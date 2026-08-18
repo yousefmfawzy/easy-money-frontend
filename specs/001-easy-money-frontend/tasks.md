@@ -60,6 +60,9 @@ Status legend: [x] done · [ ] outstanding
 ## Outstanding
 - [ ] T041 Re-import `Stock Market Projector.dc.html` + `support.js` and reconcile the
       token layer, projector layout, and value-change motion against the artboard.
-      Blocked: the design MCP requires `/design-login`, which needs an interactive
-      terminal unavailable in this environment, and the design files are not in the
-      workspace. Unblocked by "Send to Claude Code Web" or by adding the files to the repo.
+      Blocked: re-attempted via the design tool on 2026-08-18 against project
+      `59965c17-a894-4543-8c2c-a6f57259df89`; it returned that design-system
+      authorization requires `/design-login`, which needs an interactive terminal
+      unavailable in this environment. The design files are not in the workspace.
+      Unblocked by "Send to Claude Code Web" or by committing the files to the repo.
+      Until then `styles/tokens.css` is a stand-in, NOT design-derived.

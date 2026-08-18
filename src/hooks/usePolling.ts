@@ -34,28 +34,33 @@ export function usePolling<T>(fn: () => Promise<T>, intervalMs: number) {
     mounted.current = true;
     let timerId: ReturnType<typeof setTimeout> | null = null;
     let isPolling = true;
+    // Only the newest poll chain may reschedule. Without this, a visibility
+    // change while a fetch is in flight leaves two chains running in parallel
+    // and doubles the request rate against the camp screen's backend.
+    let generation = 0;
 
-    const poll = async () => {
+    const poll = async (myGeneration: number) => {
+      if (!isPolling || myGeneration !== generation) return;
+
       if (document.hidden) {
-        if (isPolling) {
-          timerId = setTimeout(poll, 1000);
-        }
+        timerId = setTimeout(() => poll(myGeneration), 1000);
         return;
       }
-      
+
       await refresh();
-      
-      if (isPolling) {
-        timerId = setTimeout(poll, intervalMs);
-      }
+
+      if (!isPolling || myGeneration !== generation) return;
+      timerId = setTimeout(() => poll(myGeneration), intervalMs);
     };
 
-    poll();
+    poll(generation);
 
     const handleVisibility = () => {
       if (!document.hidden) {
         if (timerId) clearTimeout(timerId);
-        poll();
+        // Retire any in-flight chain so it cannot reschedule alongside this one.
+        generation += 1;
+        poll(generation);
       }
     };
 

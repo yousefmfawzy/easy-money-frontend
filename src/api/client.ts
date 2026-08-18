@@ -4,9 +4,9 @@ import { ApiErrorEnvelope } from '../types/api';
 export class ApiError extends Error {
   status: number;
   code: string;
-  details: string | null;
+  details: unknown;
 
-  constructor(status: number, code: string, message: string, details: string | null) {
+  constructor(status: number, code: string, message: string, details: unknown) {
     super(message);
     this.name = 'ApiError';
     this.status = status;
@@ -34,13 +34,13 @@ async function handleResponse<T>(res: Response, authenticated: boolean): Promise
   if (!res.ok) {
     let code = 'UNKNOWN_ERROR';
     let message = 'An unknown error occurred';
-    let details: string | null = null;
+    let details: unknown = null;
     try {
       const body = await res.json() as ApiErrorEnvelope;
       if (body.error && body.error.code) {
         code = body.error.code;
         message = body.error.message || message;
-        details = body.error.details || null;
+        details = body.error.details ?? null;
       }
     } catch {
       // Ignored
