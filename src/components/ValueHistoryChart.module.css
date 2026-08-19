@@ -1,11 +1,15 @@
 .container {
   width: 100%;
-  /* Shrinks with the viewport instead of eating a phone screen whole. */
-  height: clamp(220px, 34vw, 320px);
+  /* Short enough to leave room on a landscape phone, full height on desktop. */
+  height: clamp(200px, 45vh, 300px);
   background-color: var(--color-bg-surface);
   border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-lg);
-  padding: var(--space-4);
+  padding: var(--space-3);
+}
+
+@media (min-width: 480px) {
+  .container { padding: var(--space-4); }
 }
 
 .tooltip {

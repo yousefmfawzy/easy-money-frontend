@@ -11,7 +11,7 @@
 }
 
 .title {
-  font-size: var(--font-size-2xl);
+  font-size: clamp(var(--font-size-xl), 5vw, var(--font-size-2xl));
   font-weight: 700;
   margin: 0;
   color: var(--color-text-primary);
@@ -82,7 +82,12 @@
 
 .grid {
   display: grid;
+  /* min() keeps the 320px track from overflowing viewports narrower than that. */
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
-  gap: var(--space-5);
+  gap: var(--space-4);
   align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .grid { gap: var(--space-5); }
 }

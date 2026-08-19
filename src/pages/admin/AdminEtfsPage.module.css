@@ -8,10 +8,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
 }
 
 .title {
-  font-size: var(--font-size-2xl);
+  font-size: clamp(var(--font-size-xl), 5vw, var(--font-size-2xl));
   font-weight: 700;
   color: var(--color-text-primary);
   margin: 0;
@@ -67,6 +69,10 @@
   min-width: 0;
 }
 
+.rowIdentity > * {
+  overflow-wrap: anywhere;
+}
+
 .etfName {
   font-size: var(--font-size-lg);
   font-weight: 600;
@@ -83,7 +89,7 @@
 .rowReadouts {
   display: flex;
   align-items: center;
-  gap: var(--space-6);
+  gap: var(--space-4) var(--space-6);
   flex-wrap: wrap;
 }
 
@@ -112,15 +118,26 @@
   justify-content: flex-end;
 }
 
-@media (max-width: 640px) {
-  .rowReadouts {
-    width: 100%;
-    gap: var(--space-4);
+/*
+ * Phones: the row becomes a stack — identity on top, the readouts spread on
+ * their own line — instead of three columns fighting over ~300px.
+ */
+@media (max-width: 600px) {
+  .row {
+    align-items: stretch;
+    gap: var(--space-3);
+    padding: var(--space-4);
   }
 
-  .readoutGroup {
-    align-items: flex-start;
+  .rowMain { flex: 1 1 100%; }
+
+  .rowReadouts {
+    width: 100%;
+    justify-content: space-between;
+    gap: var(--space-3);
   }
+
+  .readoutGroup { align-items: flex-start; }
 
   .trendGroup {
     min-width: 0;

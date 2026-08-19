@@ -4,12 +4,26 @@
   box-sizing: border-box;
 }
 
+html {
+  /* The board is black; let native controls and scrollbars follow. */
+  color-scheme: dark;
+  /* Landscape rotation must not silently inflate the projector's type. */
+  -webkit-text-size-adjust: 100%;
+}
+
 body {
   margin: 0;
   font-family: var(--font-family-sans);
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
   line-height: 1.5;
+  /* Long ETF names and Arabic copy wrap instead of forcing a sideways scroll. */
+  overflow-wrap: break-word;
+}
+
+/* Media never outgrows its column on a narrow screen. */
+img, svg, video, canvas {
+  max-width: 100%;
 }
 
 a {
@@ -26,6 +40,7 @@ a {
 input, select, textarea, button {
   font-family: inherit;
   font-size: 16px;
+  max-width: 100%;
 }
 
 button, input, select {
@@ -45,7 +60,10 @@ button, input, select {
   border-width: 0;
 }
 
-/* Reduced motion guard */
+/*
+ * Reduced-motion guard. The board loops several animations (growing bars, the
+ * pulsing live dot, the 38s ticker); hold them at their end state instead.
+ */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

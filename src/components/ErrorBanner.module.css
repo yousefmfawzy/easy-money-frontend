@@ -8,7 +8,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-3) var(--space-4);
 }
 
 .actions {
@@ -18,6 +19,7 @@
 }
 
 .retryButton {
+  flex: none;
   background-color: transparent;
   color: inherit;
   border: 1px solid currentColor;

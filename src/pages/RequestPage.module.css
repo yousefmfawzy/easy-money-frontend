@@ -1,17 +1,25 @@
+/* Phone-first: this form is filled in on a handset at the camp, so it starts
+   edge-to-edge and only gains card chrome once there is room for it. */
 .page {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
-  padding: var(--space-4);
+  padding-top: var(--space-4);
+  padding-bottom: calc(var(--space-6) + env(safe-area-inset-bottom));
+  padding-left: max(var(--space-3), env(safe-area-inset-left));
+  padding-right: max(var(--space-3), env(safe-area-inset-right));
   font-family: var(--font-family-sans);
 }
 
 .centerPage {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--color-bg-base);
+  padding: var(--space-4);
 }
 
 .container {
@@ -19,14 +27,24 @@
   margin: 0 auto;
   background-color: var(--color-bg-surface);
   border-radius: var(--radius-lg);
-  padding: var(--space-6);
+  padding: var(--space-4);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+@media (min-width: 480px) {
+  .page {
+    padding-top: var(--space-6);
+    padding-left: max(var(--space-4), env(safe-area-inset-left));
+    padding-right: max(var(--space-4), env(safe-area-inset-right));
+  }
+
+  .container { padding: var(--space-6); }
 }
 
 .title {
   margin-top: 0;
   margin-bottom: var(--space-6);
-  font-size: var(--font-size-2xl);
+  font-size: clamp(var(--font-size-xl), 6vw, var(--font-size-2xl));
   font-weight: 700;
   text-align: center;
 }
@@ -34,7 +52,11 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
+  gap: var(--space-5);
+}
+
+@media (min-width: 480px) {
+  .form { gap: var(--space-6); }
 }
 
 .formGroup {
@@ -84,7 +106,11 @@
 
 .radioGroup {
   display: flex;
-  gap: var(--space-4);
+  gap: var(--space-3);
+}
+
+@media (min-width: 400px) {
+  .radioGroup { gap: var(--space-4); }
 }
 
 .visuallyHidden {
@@ -100,8 +126,14 @@
 
 .radioLabel {
   flex: 1;
+  min-width: 0;
+  /* Tap target stays 48px+ even at the smallest step. */
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: var(--space-4);
+  padding: var(--space-3) var(--space-4);
   background-color: var(--color-bg-base);
   border: 2px solid transparent;
   border-radius: var(--radius-md);
@@ -155,15 +187,20 @@
   border-radius: var(--radius-md);
   overflow: hidden;
   max-width: 100%;
+  /* A portrait phone photo must not push the submit button off the screen. */
+  max-height: 45vh;
 }
 
 .photoPreview img {
+  display: block;
   width: 100%;
   height: auto;
-  display: block;
+  max-height: 45vh;
+  object-fit: contain;
 }
 
 .submitButton {
+  width: 100%;
   background-color: var(--trend-up);
   color: var(--color-bg-base);
   border: none;
@@ -208,6 +245,8 @@
 
 .detailRow {
   display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
   justify-content: space-between;
   padding: var(--space-2) 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -228,6 +267,10 @@
 }
 
 .resetButton {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
   background-color: transparent;
   color: var(--color-text-primary);
   border: 1px solid var(--color-bg-surface-hover);
