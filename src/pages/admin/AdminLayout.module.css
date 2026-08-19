@@ -99,6 +99,11 @@
 }
 
 .publicLink {
+  /* Same tap target as .navLink; it sits in the same header row. */
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  white-space: nowrap;
   color: var(--color-text-secondary);
   text-decoration: none;
 }
