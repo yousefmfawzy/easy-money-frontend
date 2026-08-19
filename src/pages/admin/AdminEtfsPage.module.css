@@ -39,24 +39,26 @@
   justify-content: space-between;
   gap: var(--space-4);
   background-color: var(--color-bg-surface);
+  /* On a pure-black page the surface alone is nearly invisible; the border is
+     what makes each row read as a card. */
+  border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-lg);
   padding: var(--space-4) var(--space-5);
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, border-color 0.2s, background-color 0.2s;
 }
 
 .row:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  border-color: var(--color-text-primary);
+  background-color: var(--color-bg-surface-hover);
 }
 
 .rowMain {
   display: flex;
   align-items: center;
   gap: var(--space-4);
-  /* Grow to the row on wide screens without forcing a 250px floor on a phone. */
   flex: 1 1 250px;
   min-width: 0;
 }
@@ -76,6 +78,7 @@
   font-weight: 600;
   margin: 0;
   color: var(--color-text-primary);
+  overflow-wrap: anywhere;
 }
 
 .timestamp {

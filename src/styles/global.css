@@ -60,25 +60,12 @@ button, input, select {
   border-width: 0;
 }
 
-/* Reduced motion guard */
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-}
-
 /*
- * Quality floor: the board loops several animations (growing bars, the pulsing
- * live dot, the 38s ticker). Honour a reduced-motion preference by holding them
- * at their end state instead of running them.
+ * Reduced-motion guard. The board loops several animations (growing bars, the
+ * pulsing live dot, the 38s ticker); hold them at their end state instead.
  */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
+  *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

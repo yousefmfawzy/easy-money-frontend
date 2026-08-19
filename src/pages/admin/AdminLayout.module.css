@@ -8,9 +8,9 @@
 
 .header {
   background-color: var(--color-bg-surface);
-  border-bottom: 1px solid var(--color-text-muted);
-  padding: var(--space-3) max(var(--space-4), env(safe-area-inset-left))
-    var(--space-3) max(var(--space-4), env(safe-area-inset-right));
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-3) max(var(--space-4), env(safe-area-inset-right))
+    var(--space-3) max(var(--space-4), env(safe-area-inset-left));
   position: sticky;
   top: 0;
   z-index: 10;
@@ -22,7 +22,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-3) var(--space-4);
   flex-wrap: wrap;
 }
 
@@ -35,12 +35,13 @@
   font-size: var(--font-size-lg);
   font-weight: 700;
   color: var(--color-text-primary);
+  white-space: nowrap;
 }
 
 .nav {
   display: flex;
   gap: var(--space-6);
-  flex: 1;
+  flex: 1 1 auto;
   justify-content: center;
 }
 
@@ -49,12 +50,12 @@
   display: flex;
   align-items: center;
   min-height: 44px;
+  white-space: nowrap;
   text-decoration: none;
   color: var(--color-text-secondary);
   font-weight: 500;
   padding: var(--space-2) 0;
   border-bottom: 2px solid transparent;
-  white-space: nowrap;
 }
 
 .navLink:hover {
@@ -69,12 +70,14 @@
 .userSection {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-3);
   font-size: var(--font-size-sm);
 }
 
 .username {
   color: var(--color-text-secondary);
+  max-width: 22ch;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -82,7 +85,7 @@
 
 .logoutButton {
   background: none;
-  border: 1px solid var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm);
   padding: var(--space-1) var(--space-3);
   font-size: var(--font-size-sm);
@@ -92,6 +95,7 @@
 
 .logoutButton:hover {
   background-color: var(--color-bg-base);
+  border-color: var(--color-text-primary);
 }
 
 .publicLink {
@@ -108,9 +112,10 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
-  padding: var(--space-5) max(var(--space-3), env(safe-area-inset-left))
+  min-width: 0;
+  padding: var(--space-5) max(var(--space-3), env(safe-area-inset-right))
     calc(var(--space-6) + env(safe-area-inset-bottom))
-    max(var(--space-3), env(safe-area-inset-right));
+    max(var(--space-3), env(safe-area-inset-left));
 }
 
 @media (min-width: 640px) {
@@ -125,13 +130,17 @@
  * Narrow screens: brand and account controls share the top line, and the nav
  * drops to a full-width row underneath instead of being squeezed between them.
  */
-@media (max-width: 640px) {
+@media (max-width: 720px) {
   .headerContent {
     gap: var(--space-2) var(--space-3);
     align-items: center;
   }
 
-  .brand { order: 0; flex: 1 1 auto; min-width: 0; }
+  .brand {
+    order: 0;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
 
   .userSection {
     order: 1;
@@ -152,5 +161,6 @@
   }
 
   .appName { font-size: var(--font-size-base); }
+
   .username { max-width: 40vw; }
 }

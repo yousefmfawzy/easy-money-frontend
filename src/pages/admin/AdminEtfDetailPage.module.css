@@ -1,7 +1,7 @@
 .page {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-6);
 }
 
 .centerPage {
@@ -18,9 +18,9 @@
   justify-content: space-between;
   gap: var(--space-4) var(--space-6);
   background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 @media (min-width: 640px) {
@@ -38,8 +38,9 @@
   font-size: clamp(var(--font-size-2xl), 6vw, var(--font-size-3xl));
   font-weight: 700;
   margin: 0;
-  color: var(--color-text-primary);
+  min-width: 0;
   overflow-wrap: anywhere;
+  color: var(--color-text-primary);
 }
 
 .readouts {
@@ -79,28 +80,39 @@
 }
 
 .chartSection {
-  margin-top: calc(-1 * var(--space-2));
+  min-width: 0;
 }
 
+/* Two balanced columns so the four cards land as a tidy 2x2 instead of
+   3 + 1 orphan; single column once there is no room for two. */
 .formsGrid {
   display: grid;
-  /* min() keeps the 300px track from overflowing viewports narrower than that. */
-  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  grid-template-columns: 1fr;
   gap: var(--space-4);
+  align-items: start;
 }
 
 @media (min-width: 640px) {
   .formsGrid { gap: var(--space-6); }
 }
 
+@media (min-width: 780px) {
+  .formsGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 .formSection {
   background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  /* Cards must clip nothing, but their contents must never spill onto the
+     neighbouring card either — see .inputRow / .fileInput below. */
+  min-width: 0;
 }
 
 .sectionTitle {
@@ -126,37 +138,74 @@
 
 .inputRow {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--space-3);
   align-items: center;
+  flex-wrap: wrap;
+  min-width: 0;
 }
 
 .input {
-  flex: 1 1 8rem;
+  flex: 1 1 12ch;
+  /* Text inputs carry an intrinsic size; without min-width: 0 they refuse to
+     shrink inside the flex row and push the button out of the card. */
   min-width: 0;
+  max-width: 100%;
   padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   font-size: var(--font-size-md);
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
 }
 
+.input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.input:focus-visible {
+  border-color: var(--color-text-primary);
+}
+
+/* File inputs have a wide intrinsic width (the native button plus the file
+   name), so they need both a floor of 0 and a ceiling of the card width. */
 .fileInput {
-  flex: 1 1 12rem;
+  flex: 1 1 14ch;
   min-width: 0;
+  max-width: 100%;
   font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.fileInput::file-selector-button {
+  margin-inline-end: var(--space-3);
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.fileInput::file-selector-button:hover {
+  background-color: var(--color-bg-surface-hover);
 }
 
 .button {
+  flex: 0 0 auto;
   background-color: var(--color-text-primary);
-  color: var(--color-bg-surface);
+  color: var(--color-text-inverse);
   border: none;
   border-radius: var(--radius-md);
   padding: var(--space-2) var(--space-4);
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
+}
+
+.button:hover:not(:disabled) {
+  opacity: 0.9;
 }
 
 .button:disabled {
@@ -171,19 +220,21 @@
 }
 
 .quickButton {
-  flex: 1 1 4.5rem;
+  flex: 1 1 4rem;
   background-color: var(--color-bg-base);
-  border: 1px solid var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   padding: var(--space-2);
   font-size: var(--font-size-sm);
+  font-weight: 600;
   cursor: pointer;
   color: var(--color-text-primary);
 }
 
 .quickButton:hover:not(:disabled) {
-  background-color: var(--color-text-muted);
-  color: var(--color-bg-surface);
+  background-color: var(--color-text-primary);
+  color: var(--color-text-inverse);
+  border-color: var(--color-text-primary);
 }
 
 .quickButton:disabled {
@@ -192,25 +243,28 @@
 }
 
 .inlineError {
-  color: var(--color-error);
+  color: var(--color-red);
   font-size: var(--font-size-sm);
-  background-color: var(--color-error-bg, rgba(239, 68, 68, 0.1));
+  background-color: rgba(255, 30, 30, 0.12);
+  border-left: 3px solid var(--color-red);
   padding: var(--space-3);
   border-radius: var(--radius-sm);
 }
 
 .inlineSuccess {
-  color: var(--color-success, #10b981);
+  color: var(--color-green);
   font-size: var(--font-size-sm);
-  background-color: rgba(16, 185, 129, 0.1);
+  background-color: rgba(58, 223, 0, 0.12);
+  border-left: 3px solid var(--color-green);
   padding: var(--space-3);
   border-radius: var(--radius-sm);
 }
 
 .inlineWarning {
-  color: var(--color-warning, #f59e0b);
+  color: var(--color-orange);
   font-size: var(--font-size-sm);
-  background-color: rgba(245, 158, 11, 0.1);
+  background-color: rgba(242, 101, 34, 0.12);
+  border-left: 3px solid var(--color-orange);
   padding: var(--space-3);
   border-radius: var(--radius-sm);
 }

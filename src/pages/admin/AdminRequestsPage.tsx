@@ -20,6 +20,7 @@ export default function AdminRequestsPage() {
   const [etfFilter, setEtfFilter] = useState<string | 'All'>('All');
   
   const [busyRequestId, setBusyRequestId] = useState<number | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
 
   const fetchEtfs = useCallback(async () => {
     try {
@@ -60,11 +61,12 @@ export default function AdminRequestsPage() {
       return;
     }
     setBusyRequestId(id);
+    setActionError(null);
     try {
       await setRequestStatus(id, 'APPROVED');
       await fetchRequests();
     } catch (err) {
-      alert(friendlyMessage(err));
+      setActionError(friendlyMessage(err));
     } finally {
       setBusyRequestId(null);
     }
@@ -73,11 +75,12 @@ export default function AdminRequestsPage() {
   const handleReject = async (id: number) => {
     if (!window.confirm("Reject this request?")) return;
     setBusyRequestId(id);
+    setActionError(null);
     try {
       await setRequestStatus(id, 'REJECTED');
       await fetchRequests();
     } catch (err) {
-      alert(friendlyMessage(err));
+      setActionError(friendlyMessage(err));
     } finally {
       setBusyRequestId(null);
     }
@@ -138,7 +141,11 @@ export default function AdminRequestsPage() {
         </div>
       </section>
 
-      <main className={styles.content}>
+      {actionError && (
+        <ErrorBanner message={actionError} onDismiss={() => setActionError(null)} />
+      )}
+
+      <section className={styles.content}>
         {loading ? (
           <div className={styles.centerBox}><Spinner /></div>
         ) : error ? (
@@ -161,7 +168,7 @@ export default function AdminRequestsPage() {
             ))}
           </div>
         )}
-      </main>
+      </section>
     </div>
   );
 }

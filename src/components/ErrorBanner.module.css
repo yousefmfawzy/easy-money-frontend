@@ -1,6 +1,8 @@
 .banner {
-  background-color: var(--trend-down);
-  color: #fff;
+  flex-wrap: wrap;
+  background-color: rgba(255, 30, 30, 0.14);
+  border: 1px solid var(--color-red);
+  color: var(--color-red);
   padding: var(--space-4);
   border-radius: var(--radius-md);
   display: flex;
@@ -8,6 +10,12 @@
   justify-content: space-between;
   flex-wrap: wrap;
   gap: var(--space-3) var(--space-4);
+}
+
+.actions {
+  display: flex;
+  gap: var(--space-2);
+  flex: none;
 }
 
 .retryButton {
