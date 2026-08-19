@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { TradeRequest } from '../types/api';
 import { resolveMediaUrl } from '../lib/media';
 import { formatLocalDateTime } from '../lib/datetime';
@@ -13,19 +14,27 @@ interface RequestCardProps {
 
 export default function RequestCard({ request, onApprove, onReject, busy = false }: RequestCardProps) {
   const isPending = request.status === 'PENDING';
+  const [avatarFailed, setAvatarFailed] = useState(false);
+
+  const avatarSrc = resolveMediaUrl(request.requester_image_url);
+  const initial = request.requester_name.trim().charAt(0).toUpperCase() || '?';
   
   return (
     <article className={styles.card}>
       <header className={styles.header}>
         <div className={styles.requester}>
           <div className={styles.avatar}>
-            <img 
-              src={resolveMediaUrl(request.requester_image_url) ?? undefined}
-              alt={request.requester_name}
-              onError={(e) => {
-                e.currentTarget.src = 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40"><rect width="40" height="40" fill="%23eee"/><text x="50%" y="50%" fill="%23999" font-family="sans-serif" font-size="14" text-anchor="middle" dy=".3em">?</text></svg>';
-              }}
-            />
+            {avatarSrc && !avatarFailed ? (
+              <img
+                src={avatarSrc}
+                alt=""
+                onError={() => setAvatarFailed(true)}
+              />
+            ) : (
+              /* A missing photo used to render the alt text, which spilled out
+                 of the 40px circle. An initial fits, and matches EtfLogo. */
+              <span aria-hidden="true" className={styles.avatarInitial}><bdi>{initial}</bdi></span>
+            )}
           </div>
           <h3 className={styles.name}><bdi>{request.requester_name}</bdi></h3>
         </div>

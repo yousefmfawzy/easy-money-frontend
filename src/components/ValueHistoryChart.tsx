@@ -1,6 +1,6 @@
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid } from 'recharts';
 import { HistoryPoint } from '../types/api';
-import { formatLocalDateTime } from '../lib/datetime';
+import { formatLocalDateTime, formatChartTick, spansMultipleDays } from '../lib/datetime';
 import { formatCurrency } from '../lib/money';
 import EmptyState from './EmptyState';
 import styles from './ValueHistoryChart.module.css';
@@ -16,19 +16,27 @@ export default function ValueHistoryChart({ history, currency }: ValueHistoryCha
   }
 
   interface ChartPoint {
+    /** Full timestamp — tooltip only. */
     t: string;
+    /** Compact timestamp — x-axis tick only. */
+    tick: string;
     v: number;
     raw: string;
   }
+
+  const withDate = spansMultipleDays(history.map(p => p.created_at));
 
   // Important and deliberate: Number() here is used only to give Recharts a plottable y-coordinate.
   // Every value rendered as text — the tooltip figure especially — must come from the original raw
   // decimal string via formatCurrency(raw, currency), never from the numeric field.
   const data: ChartPoint[] = history.map(p => ({
     t: formatLocalDateTime(p.created_at),
+    tick: formatChartTick(p.created_at, withDate),
     v: Number(p.new_value),
     raw: p.new_value
   }));
+
+  const axisNumber = new Intl.NumberFormat(undefined, { maximumFractionDigits: 0 });
 
   interface TooltipProps {
     active?: boolean;
@@ -53,20 +61,23 @@ export default function ValueHistoryChart({ history, currency }: ValueHistoryCha
     <div className={styles.container}>
       <ResponsiveContainer width="100%" height="100%">
         <LineChart data={data} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
-          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-bg-base)" />
+          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border-soft)" />
           <XAxis 
-            dataKey="t" 
+            dataKey="tick" 
             tick={{ fontSize: 12, fill: 'var(--color-text-muted)' }} 
             tickMargin={10}
-            minTickGap={30}
+            minTickGap={48}
+            interval="preserveStartEnd"
+            stroke="var(--color-border)"
           />
           <YAxis 
             domain={['auto', 'auto']} 
             tick={{ fontSize: 12, fill: 'var(--color-text-muted)' }}
-            tickFormatter={(val) => val.toString()}
-            width={60}
+            tickFormatter={(val: number) => axisNumber.format(val)}
+            width={64}
+            stroke="var(--color-border)"
           />
-          <Tooltip content={<CustomTooltip />} />
+          <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--color-border-strong)' }} />
           <Line 
             type="monotone" 
             dataKey="v" 
