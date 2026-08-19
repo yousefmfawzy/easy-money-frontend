@@ -58,6 +58,22 @@ npm run preview
 
 The output in the `dist/` folder is purely static files. You can serve them from any static host. Point `VITE_API_BASE_URL` at the deployed backend **at build time** (Vite inlines it).
 
+Serve the built output locally exactly the way production does:
+
+```bash
+npm start
+```
+
+That runs `server.js` on port 8080 (override with `PORT`), with the same
+client-side-route fallback the deployed site uses.
+
+## Deployment
+
+Both apps are hosted on DigitalOcean App Platform. The frontend is a **Static
+Site** component, not a Web Service — see [DEPLOYMENT.md](DEPLOYMENT.md) for the
+full settings, the `catchall_document` requirement for React Router paths, and
+the backend `CORS_ORIGINS` value it needs. `.do/app.yaml` holds the spec.
+
 ## Tests & checks
 
 Run tests:

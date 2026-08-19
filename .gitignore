@@ -6,3 +6,7 @@ dist
 
 # TypeScript incremental build info
 *.tsbuildinfo
+
+# Emitted by `tsc -b` from vite.config.ts; Vite must load the .ts source
+vite.config.js
+vite.config.d.ts
