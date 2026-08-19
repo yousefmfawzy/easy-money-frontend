@@ -1,0 +1,47 @@
+# DigitalOcean App Platform spec for the Easy Money frontend.
+#
+# This app is a Vite SPA: `npm run build` emits plain static files into dist/,
+# so it belongs in a Static Site component, not a Web Service. A Web Service
+# expects a long-running process listening on $PORT; with no such process the
+# deploy fails with "determine start command: when there is no default process
+# a command is required" and the readiness probe is refused on :8080.
+#
+# Apply with:
+#   doctl apps create --spec .do/app.yaml           # new app
+#   doctl apps update <APP_ID> --spec .do/app.yaml  # existing app
+#
+# Add `region:` here to pin the app next to the backend (e.g. `region: fra`);
+# left unset, App Platform picks the default region.
+
+name: easy-money-frontend
+
+static_sites:
+  - name: web
+    github:
+      repo: yousefmfawzy/easy-money-frontend
+      branch: main
+      deploy_on_push: true
+
+    build_command: npm ci && npm run build
+    output_dir: dist
+    index_document: index.html
+
+    # React Router owns /request, /admin and friends. Without this, a direct
+    # hit or refresh on those paths 404s because no such file exists in dist/.
+    catchall_document: index.html
+
+    envs:
+      # Vite inlines this at BUILD time, so it must be scoped BUILD_TIME —
+      # a RUN_TIME variable would never reach the bundle.
+      - key: VITE_API_BASE_URL
+        scope: BUILD_TIME
+        value: https://monkfish-app-6ss4k.ondigitalocean.app
+
+      # The buildpack must keep devDependencies: vite, typescript and the React
+      # plugin all live there and are needed to produce dist/.
+      - key: NPM_CONFIG_PRODUCTION
+        scope: BUILD_TIME
+        value: "false"
+      - key: NPM_CONFIG_INCLUDE
+        scope: BUILD_TIME
+        value: dev
