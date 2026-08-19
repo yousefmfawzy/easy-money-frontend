@@ -7,8 +7,8 @@
 
 .header {
   background-color: var(--color-bg-surface);
-  border-bottom: 1px solid var(--color-text-muted);
-  padding: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-3) var(--space-4);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -20,7 +20,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--space-4);
+  gap: var(--space-3) var(--space-4);
   flex-wrap: wrap;
 }
 
@@ -33,12 +33,13 @@
   font-size: var(--font-size-lg);
   font-weight: 700;
   color: var(--color-text-primary);
+  white-space: nowrap;
 }
 
 .nav {
   display: flex;
   gap: var(--space-6);
-  flex: 1;
+  flex: 1 1 auto;
   justify-content: center;
 }
 
@@ -62,17 +63,22 @@
 .userSection {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  flex-wrap: wrap;
+  gap: var(--space-3);
   font-size: var(--font-size-sm);
 }
 
 .username {
   color: var(--color-text-secondary);
+  max-width: 22ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .logoutButton {
   background: none;
-  border: 1px solid var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-sm);
   padding: var(--space-1) var(--space-3);
   font-size: var(--font-size-sm);
@@ -82,6 +88,7 @@
 
 .logoutButton:hover {
   background-color: var(--color-bg-base);
+  border-color: var(--color-text-primary);
 }
 
 .publicLink {
@@ -98,5 +105,31 @@
   max-width: 1200px;
   margin: 0 auto;
   width: 100%;
+  min-width: 0;
   padding: var(--space-6) var(--space-4);
+}
+
+/* Below the wrap point the three header blocks stack; keep the nav a full-width
+   row of its own rather than a lopsided leftover column. */
+@media (max-width: 720px) {
+  .headerContent {
+    justify-content: center;
+    text-align: center;
+  }
+
+  .nav {
+    order: 3;
+    flex: 1 0 100%;
+    justify-content: flex-start;
+    gap: var(--space-5);
+  }
+
+  .brand,
+  .userSection {
+    flex: 1 1 auto;
+  }
+
+  .userSection {
+    justify-content: flex-end;
+  }
 }

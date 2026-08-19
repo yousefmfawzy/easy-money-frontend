@@ -4,7 +4,6 @@ import { getEtf, getEtfHistory } from '../../api/etfs';
 import { updateEtfName, uploadEtfLogo, setEtfValue, adjustEtfValue } from '../../api/admin';
 import { friendlyMessage } from '../../api/errorMessages';
 import { isZeroDecimal } from '../../lib/money';
-import { ApiError } from '../../api/client';
 import EtfLogo from '../../components/EtfLogo';
 import MoneyValue from '../../components/MoneyValue';
 import TrendBadge from '../../components/TrendBadge';
@@ -165,11 +164,7 @@ export default function AdminEtfDetailPage() {
       setPctValueInput('');
       await loadData();
     } catch (err) {
-      if (err instanceof ApiError && err.code === 'ZERO_VALUE_PERCENTAGE') {
-        setPctError(friendlyMessage(err));
-      } else {
-        setPctError(friendlyMessage(err));
-      }
+      setPctError(friendlyMessage(err));
     } finally {
       setPctBusy(false);
     }
@@ -223,13 +218,15 @@ export default function AdminEtfDetailPage() {
           <h2 id="rename-heading" className={styles.sectionTitle}>Rename ETF</h2>
           <form aria-labelledby="rename-heading" onSubmit={handleRename} className={styles.form}>
             {nameError && <div role="alert" className={styles.inlineError}>{nameError}</div>}
-            {nameSuccess && <div className={styles.inlineSuccess}>Name updated successfully.</div>}
+            {nameSuccess && <div role="status" className={styles.inlineSuccess}>Name updated successfully.</div>}
             <div>
               <label htmlFor="rename-input" className={styles.label}>New ETF name</label>
               <div className={styles.inputRow}>
                 <input 
                   id="rename-input"
                   type="text" 
+                  dir="auto"
+                  autoComplete="off"
                   value={nameInput}
                   onChange={e => { setNameInput(e.target.value); setNameError(null); setNameSuccess(false); }}
                   className={styles.input}
@@ -247,7 +244,7 @@ export default function AdminEtfDetailPage() {
           <h2 id="logo-heading" className={styles.sectionTitle}>Update Logo</h2>
           <form aria-labelledby="logo-heading" onSubmit={handleUploadLogo} className={styles.form}>
             {logoError && <div role="alert" className={styles.inlineError}>{logoError}</div>}
-            {logoSuccess && <div className={styles.inlineSuccess}>Logo updated successfully.</div>}
+            {logoSuccess && <div role="status" className={styles.inlineSuccess}>Logo updated successfully.</div>}
             <div>
               <label htmlFor="logo-input" className={styles.label}>New logo file</label>
               <div className={styles.inputRow}>
@@ -272,7 +269,7 @@ export default function AdminEtfDetailPage() {
           <h2 id="abs-heading" className={styles.sectionTitle}>Set Absolute Value</h2>
           <form aria-labelledby="abs-heading" onSubmit={handleSetAbs} className={styles.form}>
             {absError && <div role="alert" className={styles.inlineError}>{absError}</div>}
-            {absSuccess && <div className={styles.inlineSuccess}>Value updated successfully.</div>}
+            {absSuccess && <div role="status" className={styles.inlineSuccess}>Value updated successfully.</div>}
             <div>
               <label htmlFor="abs-input" className={styles.label}>New absolute value</label>
               <div className={styles.inputRow}>
@@ -300,9 +297,9 @@ export default function AdminEtfDetailPage() {
           <h2 id="pct-heading" className={styles.sectionTitle}>Adjust by Percentage</h2>
           <form aria-labelledby="pct-heading" onSubmit={(e) => { e.preventDefault(); handleSetPct(pctValueInput); }} className={styles.form}>
             {pctError && <div role="alert" className={styles.inlineError}>{pctError}</div>}
-            {pctSuccess && <div className={styles.inlineSuccess}>Value adjusted successfully.</div>}
+            {pctSuccess && <div role="status" className={styles.inlineSuccess}>Value adjusted successfully.</div>}
             {isZero && !pctError && (
-              <div className={styles.inlineWarning}>
+              <div role="status" className={styles.inlineWarning}>
                 This ETF's value is 0, so a percentage change would still be 0. Set an absolute value first, then percentage changes will work.
               </div>
             )}

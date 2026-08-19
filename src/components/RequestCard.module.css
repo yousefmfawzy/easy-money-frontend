@@ -1,23 +1,27 @@
 .card {
   background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  /* Fill the grid cell so sibling cards line up top and bottom. */
+  height: 100%;
 }
 
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-3);
 }
 
 .requester {
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  min-width: 0;
 }
 
 .avatar {
@@ -25,7 +29,19 @@
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
-  background-color: var(--color-bg-base);
+  background-color: var(--color-bg-surface-hover);
+  border: 1px solid var(--color-border-soft);
+  /* Never let a long requester name squash the circle into an ellipse. */
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarInitial {
+  font-weight: 700;
+  color: var(--color-text-secondary);
+  line-height: 1;
 }
 
 .avatar img {
@@ -39,6 +55,8 @@
   font-size: var(--font-size-md);
   font-weight: 600;
   color: var(--color-text-primary);
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .statusBadge {
@@ -48,21 +66,24 @@
   border-radius: var(--radius-sm);
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  white-space: nowrap;
+  flex: none;
+  border: 1px solid currentColor;
 }
 
 .statusPENDING {
-  background-color: rgba(245, 158, 11, 0.15);
-  color: #d97706;
+  background-color: rgba(242, 101, 34, 0.15);
+  color: var(--color-orange);
 }
 
 .statusAPPROVED {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #059669;
+  background-color: rgba(58, 223, 0, 0.15);
+  color: var(--color-green);
 }
 
 .statusREJECTED {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #dc2626;
+  background-color: rgba(255, 30, 30, 0.15);
+  color: var(--color-red);
 }
 
 .tradeDetails {
@@ -87,13 +108,13 @@
 }
 
 .typeBUY {
-  background-color: rgba(16, 185, 129, 0.15);
-  color: #059669;
+  background-color: rgba(58, 223, 0, 0.15);
+  color: var(--color-green);
 }
 
 .typeSELL {
-  background-color: rgba(239, 68, 68, 0.15);
-  color: #dc2626;
+  background-color: rgba(255, 30, 30, 0.15);
+  color: var(--color-red);
 }
 
 .units {
@@ -102,11 +123,13 @@
 
 .etfName {
   font-weight: 600;
-  color: var(--color-text-primary);
+  color: var(--color-orange);
+  overflow-wrap: anywhere;
 }
 
 .snapshots {
   background-color: var(--color-bg-base);
+  border: 1px solid var(--color-border-soft);
   padding: var(--space-3);
   border-radius: var(--radius-md);
   display: flex;
@@ -147,10 +170,12 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  border-top: 1px solid var(--color-bg-base);
+  border-top: 1px solid var(--color-border-soft);
   padding-top: var(--space-4);
   flex-wrap: wrap;
   gap: var(--space-4);
+  /* Pin the footer to the bottom so actions align across the card grid. */
+  margin-top: auto;
 }
 
 .timestamps {
@@ -181,11 +206,21 @@
 }
 
 .approveButton {
-  background-color: var(--trend-up, #10b981);
-  color: white;
+  background-color: var(--color-green);
+  color: var(--color-text-inverse);
+}
+
+.approveButton:hover:not(:disabled) {
+  opacity: 0.9;
 }
 
 .rejectButton {
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
+  border: 1px solid var(--color-border-strong);
+}
+
+.rejectButton:hover:not(:disabled) {
+  border-color: var(--color-red);
+  color: var(--color-red);
 }

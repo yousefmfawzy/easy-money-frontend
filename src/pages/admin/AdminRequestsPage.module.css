@@ -18,12 +18,12 @@
 }
 
 .disclaimerBox {
-  background-color: rgba(59, 130, 246, 0.1);
-  color: #1d4ed8;
+  background-color: rgba(242, 101, 34, 0.12);
+  color: var(--color-orange);
   border-radius: var(--radius-md);
   padding: var(--space-3) var(--space-4);
   font-size: var(--font-size-sm);
-  border-left: 4px solid #3b82f6;
+  border-left: 4px solid var(--color-orange);
 }
 
 .filtersSection {
@@ -31,16 +31,18 @@
   flex-wrap: wrap;
   gap: var(--space-4);
   background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-soft);
   padding: var(--space-4);
   border-radius: var(--radius-lg);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
 }
 
 .filterGroup {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
-  min-width: 150px;
+  flex: 1 1 150px;
+  min-width: 0;
+  max-width: 320px;
 }
 
 .filterLabel {
@@ -52,16 +54,18 @@
 }
 
 .filterSelect {
+  width: 100%;
   padding: var(--space-2) var(--space-3);
-  border: 1px solid var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   background-color: var(--color-bg-base);
   color: var(--color-text-primary);
   font-size: var(--font-size-sm);
+  cursor: pointer;
 }
 
-.filterSelect:focus {
-  outline: none;
+/* Keep the border cue, but never at the cost of the focus ring. */
+.filterSelect:hover {
   border-color: var(--color-text-primary);
 }
 
@@ -78,6 +82,7 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
   gap: var(--space-5);
+  align-items: stretch;
 }

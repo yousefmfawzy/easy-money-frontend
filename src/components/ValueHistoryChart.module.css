@@ -1,18 +1,19 @@
 .container {
   width: 100%;
-  height: 300px;
+  /* Shrinks with the viewport instead of eating a phone screen whole. */
+  height: clamp(220px, 34vw, 320px);
   background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border-soft);
   border-radius: var(--radius-lg);
   padding: var(--space-4);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
 .tooltip {
   background-color: var(--color-bg-surface);
-  border: 1px solid var(--color-text-muted);
+  border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
   padding: var(--space-2) var(--space-3);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
 .tooltipTime {
