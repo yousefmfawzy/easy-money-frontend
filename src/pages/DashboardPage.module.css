@@ -3,6 +3,12 @@
  * Geometry is lifted from design/Stock Market Projector.dc.html: a 16:9 stage
  * that is a size container, with every dimension in cqw so the whole board
  * scales as one unit from a laptop to a 4K projector without reflowing.
+ *
+ * Because the stage is a size container, the same cqw geometry also works on a
+ * phone — the board just needs a stage shaped like the device. Landscape keeps
+ * the artboard's 16:9; portrait fills the viewport and rescales the cqw values
+ * (see the portrait block at the bottom) so the type stays legible instead of
+ * shrinking into a letterboxed strip.
  */
 
 .stage {
@@ -20,6 +26,7 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
+  min-height: 100dvh;
   align-items: center;
   justify-content: center;
   background: var(--color-bg-base);
@@ -82,22 +89,30 @@
   height: 0.12cqw;
   background: var(--color-border);
   margin: 1.4cqw 0 0;
+  flex: none;
 }
 
 /* ── Chart ──────────────────────────────────────────────── */
 
+/*
+ * The plot stretches into whatever height the frame has left rather than
+ * standing at a fixed 22.6cqw, so the board fills the stage on any shape.
+ * padding-top is the headroom the top bar's value label and the currency
+ * caption need — both are drawn above the plot box.
+ */
 .chart {
   flex: 1;
+  min-height: 0;
   display: grid;
-  grid-template-columns: 9.4cqw 1fr;
+  grid-template-columns: 9.4cqw minmax(0, 1fr);
   column-gap: 1.6cqw;
-  align-items: end;
-  padding-top: 2.6cqw;
+  align-items: stretch;
+  padding-top: 4.2cqw;
 }
 
 .axis {
   position: relative;
-  height: 22.6cqw;
+  height: 100%;
 }
 
 .axisCurrency {
@@ -122,7 +137,7 @@
 
 .plot {
   position: relative;
-  height: 22.6cqw;
+  height: 100%;
 }
 
 .gridline {
@@ -153,6 +168,7 @@
 .barSlot {
   position: relative;
   flex: 1;
+  min-width: 0;
   height: 100%;
 }
 
@@ -207,14 +223,16 @@
 
 .legend {
   display: grid;
-  grid-template-columns: 9.4cqw 1fr;
+  grid-template-columns: 9.4cqw minmax(0, 1fr);
   column-gap: 1.6cqw;
   padding-top: 1.4cqw;
+  flex: none;
 }
 
 .legendItems {
   display: flex;
   gap: 2.4cqw;
+  min-width: 0;
 }
 
 .legendItem {
@@ -339,15 +357,103 @@
 .tickerSep { color: var(--color-orange); }
 .tickerStrong { color: var(--color-orange); font-weight: var(--font-weight-black); }
 
+/* ── Portrait / phone ───────────────────────────────────── */
+
+/*
+ * A 16:9 stage inside a portrait viewport collapses to an unreadable band, so
+ * the stage takes the whole screen instead. cqw is then 1% of the phone's
+ * width, which is far smaller than 1% of a 16:9 board's width — every value
+ * below is the landscape figure scaled up to match, roughly 2.1x.
+ */
+@media (max-aspect-ratio: 1 / 1) {
+  .stage {
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    aspect-ratio: auto;
+  }
+
+  .frame { padding: 5cqw 5cqw 4cqw; }
+
+  /* The wordmark and the clock have to share one 90cqw line, so both are
+     sized from their own text width rather than scaled up blindly. */
+  .header { gap: 3cqw; }
+  .logo { width: 15.4cqw; height: 6.7cqw; }
+  .wordmark { font-size: 6.4cqw; }
+  .headerRight { gap: 1.6cqw; }
+  .clock { font-size: 7cqw; }
+
+  .rule { height: 0.25cqw; margin-top: 3cqw; }
+
+  .chart {
+    grid-template-columns: 16cqw minmax(0, 1fr);
+    column-gap: 2.6cqw;
+    padding-top: 8cqw;
+  }
+
+  .axisCurrency { bottom: calc(100% + 4cqw); font-size: 2.6cqw; }
+  .axisLabel { font-size: 2.9cqw; }
+  .gridline { height: 0.2cqw; }
+  .baseline { height: 0.36cqw; }
+
+  .bars { gap: 3.6cqw; }
+  .barValueNumber { font-size: 2.9cqw; }
+  .barValueCurrency { font-size: 1.7cqw; }
+  .bar { border-radius: 2.2cqw 2.2cqw 0 0; }
+
+  .legend {
+    grid-template-columns: 16cqw minmax(0, 1fr);
+    column-gap: 2.6cqw;
+    padding-top: 3cqw;
+  }
+
+  .legendItems { gap: 3.6cqw; }
+  .legendItem { gap: 1.1cqw; }
+  .badge {
+    width: 7cqw;
+    height: 7cqw;
+    border-width: 0.45cqw;
+    font-size: 2.9cqw;
+  }
+  .legendName { font-size: 3.4cqw; }
+  .legendChange { font-size: 2.6cqw; gap: 0.7cqw; }
+
+  /* The ticker bleeds to the stage edge, so its negative margins have to
+     track the portrait frame padding rather than the landscape one. */
+  .ticker {
+    margin: 4cqw -5cqw -4cqw;
+    border-top-width: 0.34cqw;
+    height: 9.2cqw;
+  }
+
+  .tickerLabel { gap: 1.5cqw; padding: 0 3cqw; }
+  .tickerDot { width: 1.8cqw; height: 1.8cqw; }
+  .tickerLabelText { font-size: 3.1cqw; }
+  .tickerRun { gap: 4.6cqw; padding: 0 3.4cqw; font-size: 3.4cqw; }
+}
+
+/*
+ * Landscape phones are short enough that the header + legend crowd the plot.
+ * Trim the vertical padding so the bars keep most of the height.
+ */
+@media (min-aspect-ratio: 1 / 1) and (max-height: 480px) {
+  .frame { padding: 2cqw 3.4cqw 1.8cqw; }
+  .rule { margin-top: 1cqw; }
+  .chart { padding-top: 3.6cqw; }
+  .legend { padding-top: 1cqw; }
+  .ticker { margin: 1.2cqw -3.4cqw -1.8cqw; height: 3.8cqw; }
+}
+
 /* ── States ─────────────────────────────────────────────── */
 
 .centerPage {
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--color-bg-base);
-  padding: var(--space-8);
+  padding: var(--space-4);
 }
 
 .statusSlot {

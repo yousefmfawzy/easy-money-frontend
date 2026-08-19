@@ -42,3 +42,17 @@
   animation: em-blink 2s ease-in-out infinite;
   flex: none;
 }
+
+/* Portrait projector: the stage fills a phone, so cqw shrinks with it — match
+   the dashboard's portrait rescale so the readout stays legible. */
+@media (max-aspect-ratio: 1 / 1) {
+  .projector {
+    font-size: 2.4cqw;
+    gap: 1cqw;
+  }
+
+  .staleDot {
+    width: 1.3cqw;
+    height: 1.3cqw;
+  }
+}
